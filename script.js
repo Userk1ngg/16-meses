@@ -1,19 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     const originalCardContainer = document.querySelector('.container');
+    const fullPageContainer = document.querySelector('.full-page-container');
     const presentationBox = document.createElement('div');
     presentationBox.classList.add('presentation-box');
 
-    const animatedCard = originalCardContainer.cloneNode(true);
-    originalCardContainer.remove();
+    const animatedCloneCard = originalCardContainer.cloneNode(true);
+    animatedCloneCard.classList.add('container-animated-clone');
+    animatedCloneCard.classList.remove('container');
 
-    animatedCard.style.opacity = '0';
-    animatedCard.style.transform = 'translateY(0) scale(0.1)';
-    animatedCard.style.transition = 'none';
+    originalCardContainer.style.display = 'none';
+    fullPageContainer.style.opacity = '0';
+    fullPageContainer.style.pointerEvents = 'none';
 
-    presentationBox.appendChild(animatedCard);
+    presentationBox.appendChild(animatedCloneCard);
     document.body.prepend(presentationBox);
-
-    void animatedCard.offsetWidth;
 
     setTimeout(() => {
         presentationBox.classList.add('animate-ribbon-x');
@@ -28,17 +28,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3000);
 
     setTimeout(() => {
-        animatedCard.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
-        animatedCard.style.opacity = '1';
-        animatedCard.style.transform = 'translateY(0) scale(1)';
+        presentationBox.remove();
+        document.body.style.overflowY = 'auto';
 
-        presentationBox.addEventListener('transitionend', function handler() {
-            if (presentationBox.classList.contains('reveal-box')) {
-                presentationBox.remove();
-                document.body.style.overflowY = 'auto';
-                presentationBox.removeEventListener('transitionend', handler);
-            }
-        });
+        originalCardContainer.style.display = 'flex';
+        originalCardContainer.style.opacity = '0';
+        originalCardContainer.style.transform = 'scale(0.8)';
 
-    }, 3800);
+        void originalCardContainer.offsetWidth;
+
+        originalCardContainer.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+        originalCardContainer.style.opacity = '1';
+        originalCardContainer.style.transform = 'scale(1)';
+
+        fullPageContainer.classList.add('visible-content');
+
+    }, 4500);
 });
